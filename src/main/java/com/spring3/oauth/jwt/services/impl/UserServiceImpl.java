@@ -1,5 +1,6 @@
 package com.spring3.oauth.jwt.services.impl;
 
+import com.spring3.oauth.jwt.entity.Genre;
 import com.spring3.oauth.jwt.entity.Tier;
 import com.spring3.oauth.jwt.entity.enums.UserStatusEnum;
 import com.spring3.oauth.jwt.exception.NotFoundException;
@@ -9,6 +10,7 @@ import com.spring3.oauth.jwt.models.request.UpdateUserRequest;
 import com.spring3.oauth.jwt.models.request.UserRequest;
 import com.spring3.oauth.jwt.models.response.UserResponse;
 import com.spring3.oauth.jwt.entity.User;
+import com.spring3.oauth.jwt.repositories.GenreRepository;
 import com.spring3.oauth.jwt.repositories.TierRepository;
 import com.spring3.oauth.jwt.repositories.UserRepository;
 import com.spring3.oauth.jwt.services.EmailService;
@@ -39,6 +41,8 @@ public class UserServiceImpl implements UserService {
     ModelMapper modelMapper = new ModelMapper();
     @Autowired
     private TierRepository tierRepository;
+    @Autowired
+    private GenreRepository genreRepository;
 
 
     // Hàm xử lý quên mật khẩu
@@ -197,6 +201,7 @@ public class UserServiceImpl implements UserService {
         user.setUpdatedAt(LocalDateTime.now());
         user.setDob(null);
         user.setChapterReadCount(0);
+        user.setSelectedGenres(null);
         if(userRequest.getId() != null){
             User oldUser = userRepository.findFirstById(userRequest.getId());
             if(oldUser != null){
@@ -211,7 +216,7 @@ public class UserServiceImpl implements UserService {
                 oldUser.setUpdatedAt(LocalDateTime.now());
                 oldUser.setDob(null);
                 oldUser.setChapterReadCount(user.getChapterReadCount());
-
+                oldUser.setSelectedGenres(null);
                 savedUser = userRepository.save(oldUser);
                 userRepository.refresh(savedUser);
             } else {
@@ -258,6 +263,20 @@ public class UserServiceImpl implements UserService {
         return convertToDTO(user);
     }
 
+    @Override
+    public UserResponseDTO updateSelectedGenres(Long userId, List<Integer> genresId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException("User not found with id: " + userId));
+
+        List<Genre> selectedGenres = genreRepository.findAllById(genresId);
+        if(selectedGenres.isEmpty()) {
+            throw new NullPointerException("Genre ids is null!");
+        }
+        user.setSelectedGenres(selectedGenres);
+        userRepository.save(user);
+        return convertToDTO(user);
+    }
+
     UserResponseDTO convertToDTO(User user) {
         UserResponseDTO userResponseDTO = new UserResponseDTO();
         userResponseDTO.setId(user.getId());
@@ -274,6 +293,15 @@ public class UserServiceImpl implements UserService {
         userResponseDTO.setImagePath(user.getImagePath());
         userResponseDTO.setCreatedAt(user.getCreatedAt());
         userResponseDTO.setUpdatedAt(user.getUpdatedAt());
+        if(user.getSelectedGenres().isEmpty()) {
+            userResponseDTO.setSelectedGenreIds(null);
+        }else{
+            userResponseDTO.setSelectedGenreIds(user.getSelectedGenres()
+                .stream()
+                .map(Genre::getId)
+                .toList()
+            );
+        }
         return userResponseDTO;
     }
 

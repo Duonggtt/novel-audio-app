@@ -8,7 +8,10 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 
 @Entity
@@ -63,5 +66,8 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "tier_id")
     private Tier tier;
+
+    @ManyToMany(fetch = LAZY)
+    private List<Genre> selectedGenres;
 
 }

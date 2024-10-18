@@ -9,6 +9,7 @@ import com.spring3.oauth.jwt.services.JwtService;
 import com.spring3.oauth.jwt.services.RefreshTokenService;
 import com.spring3.oauth.jwt.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -156,5 +157,10 @@ public class UserController {
                     .token(refreshTokenRequestDTO.getToken())
                     .build();
             }).orElseThrow(() -> new RuntimeException("Refresh Token is not in DB..!!"));
+    }
+
+    @PutMapping("/select-genres")
+    public ResponseEntity<?> selectGenresForProfile(@RequestParam Long userId, @RequestBody List<Integer> selectedGenreIds) {
+        return new ResponseEntity<>(userService.updateSelectedGenres(userId, selectedGenreIds), HttpStatus.CREATED);
     }
 }

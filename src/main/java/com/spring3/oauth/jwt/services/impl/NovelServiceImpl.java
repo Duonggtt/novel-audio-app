@@ -2,15 +2,13 @@ package com.spring3.oauth.jwt.services.impl;
 
 import com.spring3.oauth.jwt.entity.Genre;
 import com.spring3.oauth.jwt.entity.Novel;
+import com.spring3.oauth.jwt.entity.User;
 import com.spring3.oauth.jwt.exception.NotFoundException;
 import com.spring3.oauth.jwt.models.dtos.NovelResponseDTO;
 import com.spring3.oauth.jwt.models.dtos.PagedResponseDTO;
 import com.spring3.oauth.jwt.models.dtos.PaginationDTO;
 import com.spring3.oauth.jwt.models.request.UpsertNovelRequest;
-import com.spring3.oauth.jwt.repositories.AuthorRepository;
-import com.spring3.oauth.jwt.repositories.ChapterRepository;
-import com.spring3.oauth.jwt.repositories.GenreRepository;
-import com.spring3.oauth.jwt.repositories.NovelRepository;
+import com.spring3.oauth.jwt.repositories.*;
 import com.spring3.oauth.jwt.services.NovelService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +33,7 @@ public class NovelServiceImpl implements NovelService {
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
     private final ChapterRepository chapterRepository;
+    private final UserRepository userRepository;
 
 
     @Override
@@ -73,6 +72,29 @@ public class NovelServiceImpl implements NovelService {
 
         // Tạo đối tượng PaginationDTO
         PaginationDTO pagination = new PaginationDTO(novels.getNumber(), novels.getSize(), novels.getTotalElements());
+        return new PagedResponseDTO(novelDTOs, pagination);
+    }
+
+
+    @Override
+    public PagedResponseDTO getAllNovelsRecommend( Long userId, Pageable pageable) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException("User not found with id " + userId));
+        if(user.getSelectedGenres() == null) {
+            throw new NotFoundException("User not selected any genre");
+        }
+        List<Integer> userSelectedGenreIds = user.getSelectedGenres()
+            .stream()
+            .map(Genre::getId)
+            .toList();
+        Page<Novel> recommendNovelList = novelRepository.findAllByGenres_IdIn(userSelectedGenreIds, pageable);
+
+        List<NovelResponseDTO> novelDTOs = recommendNovelList.stream()
+            .map(this::convertToDto)
+            .toList();
+
+        // Tạo đối tượng PaginationDTO
+        PaginationDTO pagination = new PaginationDTO(recommendNovelList.getNumber(), recommendNovelList.getSize(), recommendNovelList.getTotalElements());
         return new PagedResponseDTO(novelDTOs, pagination);
     }
 

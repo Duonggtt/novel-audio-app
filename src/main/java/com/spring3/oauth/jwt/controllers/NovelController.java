@@ -39,6 +39,13 @@ public class NovelController {
         return ResponseEntity.ok(novelService.getAllTrendingNovels(pageable));
     }
 
+    @GetMapping("/recommend")
+    public ResponseEntity<?> getRecommendNovels(
+        @RequestParam Long userId,
+        @PageableDefault(size = 10, sort = "likeCounts", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(novelService.getAllNovelsRecommend(userId, pageable));
+    }
+
     @GetMapping("/top-read")
     public ResponseEntity<?> getTopReadNovels(
         @PageableDefault(size = 10, sort = "readCounts", direction = Sort.Direction.DESC) Pageable pageable) {

@@ -26,4 +26,5 @@ public interface NovelService {
     PagedResponseDTO findAllByAuthorName(String authorName, Pageable pageable);
     PagedResponseDTO findAllByAuthorId(Integer authorId, Pageable pageable);
     PagedResponseDTO findAllByTitle(String title, Pageable pageable);
+    PagedResponseDTO getAllNovelsRecommend( Long userId, Pageable pageable);
 }

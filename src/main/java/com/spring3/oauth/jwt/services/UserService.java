@@ -26,4 +26,5 @@ public interface UserService {
     void updateReadCountChapter(long userId);
     String confirmPaymentStatus(String username);
     UserResponseDTO updateProfile(UpdateUserRequest request, String username);
+    UserResponseDTO updateSelectedGenres(Long userId, List<Integer> genresId);
 }
