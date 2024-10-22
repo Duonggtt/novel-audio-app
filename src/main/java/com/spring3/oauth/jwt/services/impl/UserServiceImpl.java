@@ -6,6 +6,7 @@ import com.spring3.oauth.jwt.entity.enums.UserStatusEnum;
 import com.spring3.oauth.jwt.exception.NotFoundException;
 import com.spring3.oauth.jwt.models.dtos.UserResponseDTO;
 import com.spring3.oauth.jwt.models.request.ForgotPassRequest;
+import com.spring3.oauth.jwt.models.request.GenresSelectedRequest;
 import com.spring3.oauth.jwt.models.request.UpdateUserRequest;
 import com.spring3.oauth.jwt.models.request.UserRequest;
 import com.spring3.oauth.jwt.models.response.UserResponse;
@@ -264,11 +265,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO updateSelectedGenres(Long userId, List<Integer> genresId) {
+    public UserResponseDTO updateSelectedGenres(Long userId, GenresSelectedRequest request) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException("User not found with id: " + userId));
 
-        List<Genre> selectedGenres = genreRepository.findAllById(genresId);
+        List<Genre> selectedGenres = genreRepository.findAllById(request.getSelectedGenreIds());
         if(selectedGenres.isEmpty()) {
             throw new NullPointerException("Genre ids is null!");
         }

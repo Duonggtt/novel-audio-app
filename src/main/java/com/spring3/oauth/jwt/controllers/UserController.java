@@ -160,7 +160,7 @@ public class UserController {
     }
 
     @PutMapping("/select-genres")
-    public ResponseEntity<?> selectGenresForProfile(@RequestParam Long userId, @RequestBody List<Integer> selectedGenreIds) {
-        return new ResponseEntity<>(userService.updateSelectedGenres(userId, selectedGenreIds), HttpStatus.CREATED);
+    public ResponseEntity<?> selectGenresForProfile(@RequestParam Long userId, @RequestBody GenresSelectedRequest request) {
+        return new ResponseEntity<>(userService.updateSelectedGenres(userId, request), HttpStatus.CREATED);
     }
 }

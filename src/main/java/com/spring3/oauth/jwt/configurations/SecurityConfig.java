@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers("/api/v1/save", "/api/v1/login", "/api/v1/refreshToken",
-                            "/api/v1/forgot-password", "api/v1/reset-password", "/api/v1/verify-otp", "/api/genres/").permitAll()
+                            "/api/v1/forgot-password", "api/v1/reset-password", "/api/v1/verify-otp", "/api/genres/", "/api/v1/select-genres").permitAll()
                         .requestMatchers("/api/v1/**", "/api/chapters/**", "/api/comments/**", "api/novels/**"
                         , "/api/liked-novels/**").authenticated()
                         .requestMatchers("/api/genres/**").hasRole("ADMIN"))

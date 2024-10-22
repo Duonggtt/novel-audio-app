@@ -52,12 +52,10 @@ public class JwtService {
     }
 
 
-
     public String GenerateToken(String username){
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, username);
     }
-
 
 
     private String createToken(Map<String, Object> claims, String username) {

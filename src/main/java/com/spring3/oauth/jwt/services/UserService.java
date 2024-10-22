@@ -2,6 +2,7 @@ package com.spring3.oauth.jwt.services;
 
 import com.spring3.oauth.jwt.models.dtos.UserResponseDTO;
 import com.spring3.oauth.jwt.models.request.ForgotPassRequest;
+import com.spring3.oauth.jwt.models.request.GenresSelectedRequest;
 import com.spring3.oauth.jwt.models.request.UpdateUserRequest;
 import com.spring3.oauth.jwt.models.request.UserRequest;
 import com.spring3.oauth.jwt.models.response.UserResponse;
@@ -26,5 +27,5 @@ public interface UserService {
     void updateReadCountChapter(long userId);
     String confirmPaymentStatus(String username);
     UserResponseDTO updateProfile(UpdateUserRequest request, String username);
-    UserResponseDTO updateSelectedGenres(Long userId, List<Integer> genresId);
+    UserResponseDTO updateSelectedGenres(Long userId, GenresSelectedRequest request);
 }
