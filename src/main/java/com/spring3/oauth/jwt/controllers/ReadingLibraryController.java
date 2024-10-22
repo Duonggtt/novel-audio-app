@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/reading-library")
-@CrossOrigin(origins = "http://localhost:55519")
+@CrossOrigin(origins = "http://localhost:3388")
 @RequiredArgsConstructor
 public class ReadingLibraryController {
 

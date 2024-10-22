@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:55519")
+@CrossOrigin(origins = "http://localhost:3388")
 @RequestMapping("/api/authors")
 public class AuthorController {
 

@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:55519")
+@CrossOrigin(origins = "http://localhost:3388")
 @RequestMapping("/api/novels")
 public class NovelController {
 

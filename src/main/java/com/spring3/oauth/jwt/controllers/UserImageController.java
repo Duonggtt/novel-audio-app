@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:55519")
+@CrossOrigin(origins = "http://localhost:3388")
 @RequestMapping("/api/images")
 public class UserImageController {
     private final UserImageServiceImpl imageService;
